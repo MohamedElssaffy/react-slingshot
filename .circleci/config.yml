@@ -11,15 +11,15 @@ jobs:
       - checkout
       - run: npm i
       - save_cache:
-          - key: npm-packeges
-          - paths: ~/node_modules
+          key: npm-packeges
+          paths: ~/node_modules
       - run: npm run lint
   test:
     <<: *defaultImage
     steps:
       - checkout
       - restore_cache:
-          - key: npm-packeges
+          key: npm-packeges
       - run: npm i
       - run: npm run test
   analyze:
