@@ -1,0 +1,39 @@
+version: 2.1
+
+defaultImage: &defaultImage
+  docker:
+    - image: circleci/node:13.8.0
+
+jobs:
+  build:
+    <<: *defaultImage
+    steps:
+      - checkout
+      - run: npm i
+      - save_cache:
+          - key: npm-packeges
+          -
+      - run: npm run lint
+  test:
+    <<: *defaultImage
+    steps:
+      - checkout
+      - restore_cache:
+          - key: npm-packeges
+      - run: npm i
+      - run: npm run test
+  analyze:
+    <<: *defaultImage
+    steps:
+      - checkout
+      - run: npm audit
+
+workflows:
+  first_pipeline:
+    - build
+    - test:
+        requires:
+          - build
+    - analyze:
+        requires:
+          - test
